@@ -1,21 +1,24 @@
 const express = require('express')
+const { v4: uuidv4 } = require('uuid');
 const app = express()
 const PORT =  4000
 
 app.use(express.json());
 
-let phonebook = [
-    {
-      name: 'John Doe',
-      phone: '1234567890',
-      email: 'john.doe@example.com',
-    },
-    {
-      name: 'Jane Smith',
-      phone: '9876543210',
-      email: 'jane.smith@example.com',
-    },
-];
+// let phonebook = [
+//     {
+//         id: uuidv4(), 
+//       name: 'John Doe',
+//       phone: '1234567890',
+//       email: 'john.doe@example.com',
+//     },
+//     {
+//         id: uuidv4(), 
+//       name: 'Jane Smith',
+//       phone: '9876543210',
+//       email: 'jane.smith@example.com',
+//     },
+// ];
 
 app.get('/api/phonebook', (req, res) => {
     res.json(phonebook);
@@ -24,17 +27,16 @@ app.get('/api/phonebook', (req, res) => {
 
 app.post('/api/phonebook', (req, res) => {
     const { name, phone, email } = req.body;
-    const newContact = { name, phone, email };
+    const newContact = {id: uuidv4(), name, phone, email };
     phonebook.push(newContact);
     res.json(newContact);
 });
 
-app.put('/api/phonebook/:phone', (req, res) => {
-    const phoneToUpdate = req.params.phone;
+app.put('/api/phonebook/:id', (req, res) => {
+    const contactIdToUpdate = req.params.id;
     const updatedData = req.body;
-  console.log(phoneToUpdate,req.params)
-    const contactIndex = phonebook.findIndex((contact) => contact.phone === phoneToUpdate);
-    console.log(contactIndex)
+  
+    const contactIndex = phonebook.findIndex((contact) => contact.id === contactIdToUpdate);
     if (contactIndex !== -1) {
       phonebook[contactIndex] = { ...phonebook[contactIndex], ...updatedData };
       res.json(phonebook[contactIndex]);
@@ -43,9 +45,9 @@ app.put('/api/phonebook/:phone', (req, res) => {
     }
 });
 
-app.delete('/api/phonebook/:phone', (req, res) => {
-    const phoneToDelete = req.params.phone;
-    const contactIndex = phonebook.findIndex((contact) => contact.phone === phoneToDelete);
+  app.delete('/api/phonebook/:id', (req, res) => {
+    const contactIdToDelete = req.params.id;
+    const contactIndex = phonebook.findIndex((contact) => contact.id === contactIdToDelete);
     if (contactIndex !== -1) {
       const deletedContact = phonebook.splice(contactIndex, 1)[0];
       res.json(deletedContact);
