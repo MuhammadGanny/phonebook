@@ -1,24 +1,13 @@
 const express = require('express')
+const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 const app = express()
 const PORT =  4000
 
 app.use(express.json());
+app.use(cors());
+let phonebook = []
 
-// let phonebook = [
-//     {
-//         id: uuidv4(), 
-//       name: 'John Doe',
-//       phone: '1234567890',
-//       email: 'john.doe@example.com',
-//     },
-//     {
-//         id: uuidv4(), 
-//       name: 'Jane Smith',
-//       phone: '9876543210',
-//       email: 'jane.smith@example.com',
-//     },
-// ];
 
 app.get('/api/phonebook', (req, res) => {
     res.json(phonebook);
